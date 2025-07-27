@@ -1,0 +1,58 @@
+ANOTA_IMOBILIARIA_CRM/
+├── .github/
+├── └── workflows/
+├────── ├── ci-cd.yml
+├────── └── README.md
+│
+├── public/
+├── ├── Config/
+├────── └── Conexao.php
+│
+├── ├── Controllers/
+├────── └── Login_Controller.php
+│
+├── ├── css/
+├────── ├── bootstrap.min.css
+├────── └── complementos.css
+│
+├── ├── Daos/
+├────── └── Helpers.php
+│
+├── ├── docs/
+├────── └── Estrutura.txt
+│
+├── ├── js/
+├────── ├── bootstrap-notify.min.js
+├────── ├── bootstrap.bundle.min.js
+├────── ├── bootstrap.min.js
+├────── └── complementos.js
+│
+├── ├── Models/
+├────── └── Login_Model.php
+│
+├── ├── Views/
+├────── ├── portal/
+├────────── └── Principal_View.php
+├────── ├── sistema/
+├────────── └── Login_View.php
+├────── ├── template_portal/
+├────────── ├── body.php
+├────────── ├── footer.php
+├────────── └── header.php
+├────── ├── template_sistema/
+├────────── ├── body.php
+├────────── ├── footer.php
+├────────── └── header.php
+├────── └── Login_View.php
+│
+├── ├── autoload.php
+├── └── index.php
+│
+├── .env
+├── .env_local
+├── .gitignore
+├── Como_Usar_A_Limpeza.txt
+├── docker-compose.yml
+├── Dockerfile
+├── limpeza_docker.bat
+└── README.md
