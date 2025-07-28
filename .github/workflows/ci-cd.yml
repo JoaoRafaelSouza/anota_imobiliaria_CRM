@@ -1,0 +1,45 @@
+name: CI/CD - Anota Imobiliária CRM
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      APP_PORT: 8080
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: anota_imobiliaria
+      DB_USERNAME: admin
+      DB_PASSWORD: 123
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Subir containers (Docker Compose)
+        run: docker-compose up -d --build
+
+      - name: Aguardar MySQL iniciar
+        run: |
+          echo "Esperando banco subir..."
+          sleep 15
+
+      - name: Verificar containers em execução
+        run: docker ps -a
+
+      - name: Testar conexão ao banco de dados (MySQL)
+        run: |
+          docker exec anota_crm_db mysql -hlocalhost -u${{ env.DB_USERNAME }} -p${{ env.DB_PASSWORD }} -e "SHOW DATABASES;"
+
+      - name: Verificar se aplicação responde na porta ${{ env.APP_PORT }}
+        run: |
+          curl --fail http://localhost:${{ env.APP_PORT }} || exit 1
+
+      - name: Encerrar containers
+        if: always()
+        run: docker-compose down

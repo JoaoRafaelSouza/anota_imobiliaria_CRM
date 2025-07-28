@@ -4,7 +4,7 @@ ANOTA_IMOBILIARIA_CRM/
 ├────── ├── ci-cd.yml
 ├────── └── README.md
 │
-├── public/
+├── Public/
 ├── ├── Config/
 ├────── └── Conexao.php
 │
