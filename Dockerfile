@@ -1,13 +1,9 @@
-# Usa a imagem oficial do PHP com Apache
 FROM php:8.2-apache
 
-# Instala extensões PHP necessárias
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
-# Ativa o módulo rewrite do Apache
 RUN a2enmod rewrite
 
-# Instala utilitários
 RUN apt-get update && apt-get install -y \
     unzip \
     nano \
@@ -17,12 +13,23 @@ RUN apt-get update && apt-get install -y \
     zip \
     && docker-php-ext-install zip
 
-# Copia todos os arquivos do projeto para o container
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
 COPY . /var/www/html
 
-# Define permissões
-RUN chown -R www-data:www-data /var/www/html \
-    && chmod -R 755 /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
-# Define o diretório de trabalho
 WORKDIR /var/www/html
+
+RUN echo '<Directory /var/www/html/>\n\
+    Options Indexes FollowSymLinks\n\
+    AllowOverride All\n\
+    Require all granted\n\
+    </Directory>' > /etc/apache2/conf-available/override.conf && \
+    a2enconf override
+
+RUN echo "xdebug.mode=debug\n\
+    xdebug.start_with_request=yes\n\
+    xdebug.client_host=host.docker.internal\n\
+    xdebug.client_port=9003\n\
+    xdebug.log=/tmp/xdebug.log" > /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini

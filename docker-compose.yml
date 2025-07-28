@@ -1,29 +1,43 @@
 services:
-  app:
-    build: .
-    container_name: anota_crm_php
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: anota_imobiliaria_apache
     ports:
-      - "${APP_PORT}:80"
+      - "${APP_PORT:-8080}:80"
+      - "9003:9003"
     volumes:
       - .:/var/www/html
     env_file:
       - .env
     depends_on:
       - db
+    environment:
+      - APP_ENV= ${APP_ENV}
+      - DB_HOST= ${DB_HOST}
+      - DB_PORT= ${DB_PORT}
+      - DB_DATABASE= ${DB_DATABASE}
+      - DB_USERNAME= ${DB_USERNAME}
+      - DB_PASSWORD= ${DB_PASSWORD}
+      - XDEBUG_MODE=debug
+      - XDEBUG_CONFIG=client_host=host.docker.internal client_port=9003
+      - PHP_IDE_CONFIG=serverName=localhost
 
   db:
     image: mysql:8.0
-    container_name: anota_crm_db
+    container_name: anota_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_USER: ${BD_USER_ROOT}
       MYSQL_DATABASE: ${DB_DATABASE}
       MYSQL_USER: ${DB_USERNAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${BD_PASSWORD_ROOT}
     ports:
       - "${DB_PORT}:3306"
     volumes:
-      - db_data:/var/lib/mysql
+      - dbdata:/var/lib/mysql
 
 volumes:
-  db_data:
+  dbdata:
